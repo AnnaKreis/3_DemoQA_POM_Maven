@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.util.List;
 
@@ -38,6 +39,44 @@ public class FramePage extends BasePage {
 
     public FramePage verifyIFrameText(String text) {
         Assert.assertTrue(shouldHaveText(sampleHeading, text, 5));
+        return this;
+    }
+
+
+    @FindBy(id = "frame1")
+    WebElement frame1;
+
+    public FramePage switchToFrameById() {
+        driver.switchTo().frame(frame1);
+        return this;
+    }
+
+    public FramePage switchToMainPage() {
+        driver.switchTo().defaultContent();
+        return this;
+    }
+
+    @FindBy(tagName = "h1")
+    WebElement title;
+
+    public FramePage verifyMainPageByTitle(String text) {
+        Assert.assertTrue(title.getText().contains(text));
+        return this;
+    }
+
+    @FindBy(tagName = "body")
+    WebElement body;
+
+    public FramePage hendleNestedFrames() {
+        // switch to parent frame
+        driver.switchTo().frame(frame1);
+        // get text from parent frame
+        System.out.println("iFrame is: " + body.getText());
+        // number all frames in parent frame
+        System.out.println("Number of iFrames inside parent iFrame is: " + iFrame.size());
+        // switch to child frame
+        driver.switchTo().frame(0);
+        System.out.println("iFrame is: " + body.getText());
         return this;
     }
 }
